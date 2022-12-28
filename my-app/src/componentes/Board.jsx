@@ -15,10 +15,13 @@ const Board = () => {
     // asignada en un arreglo usando useState con un arreglo de 9 posiciones con nulls como valor por defecto de squares.
     const [squares, setSquares] = useState(Array(9).fill(null));
 
+    const [xsNext, setXsNext] = useState(true);
+
     const handleClick = (i) => {
         const sq = squares.slice();
-        sq[i] = 'X';
+        sq[i] = xsNext ? 'X' : 'O';
         setSquares(sq);
+        setXsNext(!xsNext);
     };
 
     // para saber el estado de los cuadrados, mandamos una funcion en el onClick para que el 
@@ -27,7 +30,7 @@ const Board = () => {
         return <Square value={squares[i]} onClick={() => handleClick(i)} />
     };
 
-    const status = 'Siguiente jugador: X';
+    const status = 'Siguiente jugador: ' + (xsNext ? 'X' : 'O');
 
     return (
         <div>
