@@ -17,8 +17,34 @@ const Board = () => {
 
     const [xsNext, setXsNext] = useState(true);
 
+    // funcion que calcula el ganardor de la partida en base a las lineas definidas en el arreglo "lines", que son todas
+    // las posibles combinaciones que se pueden hacer para ganar una partida en el Tic-Tac-Toe (ta-te-ti).
+    const calculateWinner = (squares) => {
+        const lines = [
+            [0,1,2],
+            [3,4,5],
+            [6,7,8],
+            [0,3,6],
+            [1,4,7],
+            [2,5,8],
+            [0,4,8],
+            [2,4,6],
+        ];
+        for (let i = 0; i < lines.length; i++) {
+            const [a,b,c] = lines[i];
+            if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+                return squares[a];
+            }
+        }
+        return null;
+    };
+
     const handleClick = (i) => {
         const sq = squares.slice();
+        // se salta el click si ya hay un ganador o el cuadrado ya tiene una 'X' o una 'O'.
+        if (calculateWinner(squares) || squares[i]) {
+            return;
+        }
         sq[i] = xsNext ? 'X' : 'O';
         setSquares(sq);
         setXsNext(!xsNext);
@@ -30,7 +56,14 @@ const Board = () => {
         return <Square value={squares[i]} onClick={() => handleClick(i)} />
     };
 
-    const status = 'Siguiente jugador: ' + (xsNext ? 'X' : 'O');
+    const winner = calculateWinner(squares);
+    let status;
+
+    if (winner) {
+        status = 'Ganador: ' + winner;
+    } else {
+        status = 'Siguiente jugador: ' + (xsNext ? 'X' : 'O');
+    }
 
     return (
         <div>
